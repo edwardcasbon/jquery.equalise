@@ -3,35 +3,49 @@
 * Author: Edward Casbon
 * Email: edward@edwardcasbon.co.uk
 * URL: http://www.edwardcasbon.co.uk
-* Version: 1.0
-* Date: 5th April 2013
+* Version: 2.0
+* Date: 24th September 2014
 *
 * Example usage:
-* $(".columns").equalise(); 
+* $(".column-container").equalise();
 *
-* Note that to equalise different sets of columns you'll need to call equalise multiple times. For example:
-* $(".columnGroup1").equalise();
-* $(".columnGroup2").equalise();
 *
 **/
 (function($) {
-	$.fn.equalise = function() {
+	$.fn.equalise = function(options) {
 
-		var $height = 0;
+		// Default settings.
+		var settings = {
+			itemClass: "equalise-item"
+		};
 
-		this.each(function(){
-			var $element 		= $(this),
-				$outerHeight 	= $element.outerHeight();
-			if($outerHeight > $height) $height = $outerHeight;
-		});
-		
+		// Overide with custom settings.
+		$.extend(settings, options);
+
+		// Loop through the elements.
 		return this.each(function(){
-			var $element = $(this);
-			$element.height(
-				$height - 
-				$element.css("paddingTop").replace(/[^-\d\.]/g, '') - 
-				$element.css("paddingBottom").replace(/[^-\d\.]/g, '')
-			);
+			var $this = $(this),
+				height = 0,
+				items = $this.find("." + settings.itemClass);
+
+			// Loop through the items, working out the largest height.
+			for(var i=0; i<items.length; i++) {
+				var $item = $(items[i]),
+					itemHeight = $item.outerHeight();
+
+				height = (itemHeight > height) ? itemHeight : height;
+			}
+
+			// Loop through the items setting the heights.
+			for(var i=0; i<items.length; i++) {
+				var $item = $(items[i]);
+				$item.height(
+					height -
+					$item.css("paddingTop").replace(/[^-\d\.]/g, '') -
+					$item.css("paddingBottom").replace(/[^-\d\.]/g, '')
+				);
+			}
+
 		});
 	};
 })(jQuery);
