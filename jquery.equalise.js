@@ -35,9 +35,15 @@
 			// Loop through the items, working out the largest height.
 			for(var i=0; i<items.length; i++) {
 				var $item = $(items[i]),
-					itemHeight = $item.outerHeight(),
-					groupAttr = "data-" + settings.groupAttr,
-					group = $item.attr(groupAttr) || "default";
+				itemHeight,
+				groupAttr = "data-" + settings.groupAttr,
+				group = $item.attr(groupAttr) || "default";
+
+				// remove any previously set heights
+				$item.height('auto');
+
+				// get natural height
+				itemHeight = $item.outerHeight();
 				
 				// If group not yet added to array, add and set to 0.
 				if(!groups[group]) {
